@@ -4,7 +4,7 @@
  * CACHE_VERSION est injecté par build.py (hash du contenu) pour invalider
  * automatiquement le cache à chaque nouveau build.
  */
-const CACHE_VERSION = "80f022c26982";
+const CACHE_VERSION = "a2fe6d30d890";
 const CACHE_NAME = "egypte-guide-" + CACHE_VERSION;
 
 const ASSETS = [
@@ -34,6 +34,13 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
+
+  // Exception offline : les requêtes cross-origin (APIs taux de change + météo)
+  // passent directement au réseau — jamais servies depuis le cache SW, jamais
+  // mises en cache SW. Le cache applicatif de ces données, c'est le localStorage.
+  let sameOrigin = true;
+  try { sameOrigin = new URL(req.url).origin === self.location.origin; } catch (e) {}
+  if (!sameOrigin) return;
 
   event.respondWith(
     caches.match(req).then((cached) => {
