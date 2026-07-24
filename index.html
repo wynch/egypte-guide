@@ -282,6 +282,68 @@ mark{background:transparent;color:var(--gold);font-weight:700;}
 .catcard .cd{color:var(--muted);font-size:13px;margin-top:3px;}
 .catcard .ci{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;}
 .catcard .ci svg{width:23px;height:23px;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ===================== CARTE (onglet Voyage) ===================== */
+:root{
+  --sea:#0b1e33; --sea-edge:#1c3d5a; --sealab:#5c81a6;
+  --land:#1b2029; --land-edge:#c8a24e; --offmap:#0b0d12;
+  --nileblue:#3f86a0; --maplab:#e3d3ac; --region:#697180;
+}
+@media (prefers-color-scheme:light){
+  :root{
+    --sea:#c9dcef; --sea-edge:#a6c4df; --sealab:#5f7fa0;
+    --land:#efe4cb; --land-edge:#9a7a34; --offmap:#e6dbc4;
+    --nileblue:#3f8fa8; --maplab:#5a4e33; --region:#a89d87;
+  }
+}
+/* Toggle Carte / Liste */
+.vtoggle{display:flex;gap:5px;background:var(--card2);border:1px solid var(--border-soft);padding:4px;border-radius:12px;margin:2px 0 14px;}
+.vtoggle button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:9px;font-size:14px;font-weight:620;color:var(--muted);min-height:40px;}
+.vtoggle button.on{background:var(--card);color:var(--gold);box-shadow:0 1px 4px rgba(0,0,0,.18);}
+.vtoggle button svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+/* Carte */
+.mapwrap{position:relative;width:100%;aspect-ratio:575/500;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--border-soft);background:var(--offmap);box-shadow:var(--shadow);margin:0 0 12px;}
+.egmap{position:absolute;inset:0;width:100%;height:100%;display:block;font-family:inherit;}
+.egmap .sea{fill:var(--sea);stroke:var(--sea-edge);stroke-width:.7;}
+.egmap .land{fill:var(--land);stroke:var(--land-edge);stroke-width:1.5;stroke-linejoin:round;}
+.egmap .nile{fill:none;stroke:var(--nileblue);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+.egmap .nile.thin{stroke-width:1.7;}
+.egmap .lake{fill:var(--nileblue);opacity:.82;stroke:none;}
+.egmap .route{fill:none;stroke:var(--gold);stroke-linecap:round;stroke-linejoin:round;}
+.egmap .r-plane{stroke-width:2;stroke-dasharray:1.5 5.5;}
+.egmap .r-cruise{stroke-width:2.6;}
+.egmap .r-bus{stroke-width:2;stroke-dasharray:7 5;}
+.egmap .pas{fill:var(--gold);stroke:#efe4cb;stroke-width:1.4;}
+.egmap .pasnum{fill:#1a1206;font-size:12px;font-weight:800;text-anchor:middle;dominant-baseline:central;}
+.egmap .dot{fill:var(--gold);stroke:var(--offmap);stroke-width:1;}
+.egmap .poi{fill:var(--offmap);stroke:var(--sand);stroke-width:1.8;}
+.egmap .poi.opt{fill:var(--gold);fill-opacity:.5;stroke:var(--gold);}
+.egmap .mlab{fill:var(--maplab);font-size:12.5px;font-weight:640;}
+.egmap .mlab.sub{fill:var(--gold);font-size:11px;font-weight:700;}
+.egmap .rlab{fill:var(--region);font-size:11px;font-weight:640;letter-spacing:2px;}
+.egmap .slab{fill:var(--sealab);font-size:12.5px;font-weight:640;letter-spacing:2px;}
+.egmap .nlab{fill:var(--nileblue);font-size:12px;font-weight:640;font-style:italic;}
+.egmap .tap{fill:transparent;cursor:pointer;}
+.egmap .lens{fill:none;stroke:var(--gold);stroke-width:1;stroke-dasharray:3 3;opacity:.7;}
+.egmap .inset-bg{fill:var(--card);stroke:var(--gold-dim);stroke-width:1.2;}
+.egmap .inset-t{fill:var(--gold);font-size:12px;font-weight:800;letter-spacing:.3px;}
+.egmap .inset-sub{fill:var(--faint);font-size:9.5px;font-weight:600;}
+.egmap .irow:active .irow-hit{fill:var(--tap);}
+.egmap .ilab{fill:var(--text);font-size:12.5px;font-weight:640;}
+.egmap .iday{fill:var(--gold);font-size:11px;font-weight:700;}
+.egmap .leg-bg{fill:var(--card);opacity:.94;stroke:var(--border-soft);stroke-width:1;}
+.egmap .leg-t{fill:var(--muted);font-size:11px;font-weight:600;}
+/* Infobulle POI (overlay HTML) */
+.mtip{position:absolute;z-index:6;max-width:172px;background:var(--card);border:1px solid var(--gold-dim);
+  border-radius:11px;padding:8px 11px;font-size:12.5px;line-height:1.38;color:var(--text);
+  box-shadow:var(--shadow);transform:translate(-50%,calc(-100% - 12px));display:none;pointer-events:none;}
+.mtip.on{display:block;animation:fade .16s ease;}
+.mtip b{display:block;color:var(--gold);font-size:12px;font-weight:700;margin-bottom:2px;}
+.mtip::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;
+  background:var(--card);border-right:1px solid var(--gold-dim);border-bottom:1px solid var(--gold-dim);
+  transform:translateX(-50%) rotate(45deg);}
+.maphint{color:var(--faint);font-size:12.5px;text-align:center;margin:-2px 0 14px;}
 </style>
 </head>
 <body>
@@ -411,6 +473,184 @@ function glossForDay(it){
   return words.slice(0,6);
 }
 
+/* ===================== CARTE D'ÉGYPTE (SVG inline, 100% offline) =====================
+   Contours : Natural Earth (via world.geo.json/EGY, Polygon 42 pts) — embarqués en dur.
+   Projection équirectangulaire, corrigée en longitude par cos(latitude médiane) :
+     X = (lon - 24.3) * 46 * cos(27°) + 22
+     Y = (31.95 - lat) * 46 + 18
+   Toutes les positions (villes, Nil, lac Nasser, POI, encart) découlent de vraies
+   coordonnées lat/lon converties par proj() ci-dessous — la géographie est juste. */
+const MAP={lon0:24.3,lat1:31.95,mid:27.0,scale:46,padx:22,pady:18,VBW:575,VBH:500};
+const KX=MAP.scale*Math.cos(MAP.mid*Math.PI/180);
+function X(lon){return (lon-MAP.lon0)*KX+MAP.padx;}
+function Y(lat){return (MAP.lat1-lat)*MAP.scale+MAP.pady;}
+function P(lo,la){return X(lo).toFixed(1)+','+Y(la).toFixed(1);}
+function polyD(pts,close){return 'M'+pts.map(p=>P(p[0],p[1])).join(' L')+(close?' Z':'');}
+
+// Contour de l'Égypte (lon,lat) — Natural Earth simplifié (Sinaï, delta, mer Rouge)
+const GEO_RING=[[34.9226,29.50133],[34.64174,29.09942],[34.42655,28.34399],[34.15451,27.8233],[33.92136,27.6487],[33.58811,27.97136],[33.13676,28.41765],[32.42323,29.85108],[32.32046,29.76043],[32.73482,28.70523],[33.34876,27.69989],[34.10455,26.14227],[34.47387,25.59856],[34.79507,25.03375],[35.69241,23.92671],[35.49372,23.75237],[35.52598,23.10244],[36.69069,22.20485],[36.86623,22],[32.9,22],[29.02,22],[25,22],[25,25.6825],[25,29.238655],[24.70007,30.04419],[24.95762,30.6616],[24.80287,31.08929],[25.16482,31.56915],[26.49533,31.58568],[27.45762,31.32126],[28.45048,31.02577],[28.91353,30.87005],[29.68342,31.18686],[30.09503,31.4734],[30.97693,31.55586],[31.68796,31.4296],[31.96041,30.9336],[32.19247,31.26034],[32.99392,31.02407],[33.7734,30.96746],[34.26544,31.21936]];
+// Le Nil (sud → nord), waypoints réels le long de la vallée puis le delta
+const GEO_NILE=[[32.90,24.05],[32.93,24.48],[32.87,24.98],[32.55,25.29],[32.64,25.70],[32.73,26.16],[32.20,26.30],[31.95,26.62],[31.18,27.18],[30.90,27.75],[30.80,28.15],[31.05,28.70],[31.10,29.07],[31.22,29.85],[31.20,30.18]];
+const GEO_ROSE=[[31.20,30.18],[30.90,30.55],[30.55,30.98],[30.42,31.40]];
+const GEO_DAMI=[[31.20,30.18],[31.45,30.72],[31.72,31.08],[31.82,31.42]];
+// Lac Nasser (au sud d'Assouan)
+const GEO_LAKE=[[32.88,24.05],[33.05,23.55],[32.85,23.00],[32.50,22.55],[32.05,22.20],[31.60,22.05],[31.45,22.35],[31.75,22.80],[32.05,23.20],[32.40,23.60],[32.66,23.95]];
+// Étapes du circuit (pastilles or numérotées) — tap → détail du jour
+const RT_CITIES=[
+  {n:'Le Caire',lon:31.24,lat:30.04,num:1,day:1,rng:'J1-3',side:'r'},
+  {n:'Assouan',lon:32.90,lat:24.09,num:3,day:3,rng:'J3-5',side:'l'},
+  {n:'Louxor',lon:32.64,lat:25.70,num:6,day:6,rng:'J6-8',side:'l'},
+  {n:'Marsa Alam',lon:34.90,lat:25.07,num:8,day:8,rng:'J8-15',side:'r'}
+];
+// Escales de croisière entre Assouan et Louxor (petits points ; détaillées dans l'encart)
+const RT_DOTS=[[32.93,24.48],[32.87,24.98],[32.55,25.29]];
+// Autres lieux d'intérêt (marqueurs creux, infobulle)
+const POIS=[
+  {id:'alex',n:'Alexandrie',lon:29.92,lat:31.20,side:'r',info:'Cité fondée par Alexandre : phare disparu, Bibliotheca Alexandrina.'},
+  {id:'suez',n:'Canal de Suez',lon:32.35,lat:30.62,side:'r',info:'Voie maritime Méditerranée–mer Rouge (1869), clé du commerce mondial.'},
+  {id:'cath',n:'Ste-Catherine',lon:33.98,lat:28.56,side:'l',info:'Monastère au pied du mont Sinaï où Moïse aurait reçu les Tables de la Loi.'},
+  {id:'siwa',n:'Oasis de Siwa',lon:25.52,lat:29.20,side:'r',info:"Oasis isolée du désert Libyque ; oracle d'Amon consulté par Alexandre."},
+  {id:'abyd',n:'Abydos · Dendérah',lon:32.05,lat:26.20,side:'l',info:"Temple de Séthi Ier à Abydos et temple d'Hathor à Dendérah."},
+  {id:'hurg',n:'Hurghada',lon:33.81,lat:27.26,side:'r',info:'Station de la mer Rouge ; aéroport du vol retour (J15).'},
+  {id:'absi',n:'Abou Simbel',lon:31.63,lat:22.34,side:'r',opt:true,info:'Temples colossaux de Ramsès II, déplacés pour échapper au lac Nasser (option J5).'}
+];
+
+function tapCircle(lo,la,day,r){return '<circle class="tap" data-day="'+day+'" cx="'+X(lo).toFixed(1)+'" cy="'+Y(la).toFixed(1)+'" r="'+(r||34)+'"/>';}
+
+function buildMapSVG(){
+  let s='<svg class="egmap" viewBox="0 0 '+MAP.VBW+' '+MAP.VBH+'" preserveAspectRatio="xMidYMid meet" aria-label="Carte de l\'itinéraire en Égypte">';
+  // --- mers (dessinées avant la terre) ---
+  // Méditerranée : au-dessus de la côte nord
+  const med=GEO_RING.slice(27,42);
+  s+='<path class="sea" d="M0,0 L'+MAP.VBW+',0 L'+X(med[med.length-1][0]).toFixed(1)+','+Y(med[med.length-1][1]).toFixed(1)+' '
+     +med.slice().reverse().map(p=>'L'+P(p[0],p[1])).join(' ')+' L0,'+Y(31.09).toFixed(1)+' Z"/>';
+  // Mer Rouge + golfes : à droite de la côte est
+  const rs=GEO_RING.slice(7,19);
+  s+='<path class="sea" d="M'+P(rs[0][0],rs[0][1])+' '+rs.slice(1).map(p=>'L'+P(p[0],p[1])).join(' ')
+     +' L'+MAP.VBW+','+MAP.VBH+' L'+MAP.VBW+','+Y(rs[0][1]).toFixed(1)+' Z"/>';
+  // Golfe d'Aqaba (est du Sinaï)
+  const aq=GEO_RING.slice(0,7);
+  s+='<path class="sea" d="M'+P(aq[0][0],aq[0][1])+' '+aq.slice(1).map(p=>'L'+P(p[0],p[1])).join(' ')
+     +' L'+MAP.VBW+','+Y(aq[6][1]).toFixed(1)+' L'+MAP.VBW+','+Y(aq[0][1]).toFixed(1)+' Z"/>';
+  // --- terre ---
+  s+='<path class="land" d="'+polyD(GEO_RING,true)+'"/>';
+  // --- lac Nasser + Nil ---
+  s+='<path class="lake" d="'+polyD(GEO_LAKE,true)+'"/>';
+  s+='<path class="nile" d="'+polyD(GEO_NILE,false)+'"/>';
+  s+='<path class="nile thin" d="'+polyD(GEO_ROSE,false)+'"/>';
+  s+='<path class="nile thin" d="'+polyD(GEO_DAMI,false)+'"/>';
+  // --- étiquettes régions / mers ---
+  s+='<text class="slab" x="150" y="20">MÉDITERRANÉE</text>';
+  s+='<text class="slab" x="512" y="360" transform="rotate(-90 512 360)">MER ROUGE</text>';
+  s+='<text class="rlab" x="418" y="120">SINAÏ</text>';
+  s+='<text class="rlab" x="120" y="250">DÉSERT</text><text class="rlab" x="120" y="264">LIBYQUE</text>';
+  s+='<text class="rlab" x="432" y="235">DÉSERT</text><text class="rlab" x="432" y="249">ARABIQUE</text>';
+  s+='<text class="nlab" x="392" y="120" transform="rotate(-90 392 120)">Le Nil</text>';
+  s+='<text class="mlab" x="'+(X(31.9)).toFixed(0)+'" y="430" style="fill:var(--nileblue);font-size:10px;letter-spacing:1px">LAC NASSER</text>';
+  // --- tracés du circuit ---
+  s+='<path class="route r-plane" d="M'+P(31.24,30.04)+' L'+P(32.90,24.09)+'"/>';        // avion
+  const cruisePts=[[32.90,24.09],[32.93,24.48],[32.87,24.98],[32.55,25.29],[32.64,25.70]];
+  s+='<path class="route r-cruise" d="'+polyD(cruisePts,false)+'"/>';                     // croisière
+  s+='<path class="route r-bus" d="M'+P(32.64,25.70)+' L'+P(34.90,25.07)+'"/>';           // bus Louxor→Marsa Alam
+  s+='<path class="route r-bus" d="M'+P(34.90,25.07)+' L'+P(33.81,27.26)+'"/>';           // bus Marsa Alam→Hurghada
+  // petit avion sur le segment aérien
+  const amx=(X(31.24)+X(32.90))/2, amy=(Y(30.04)+Y(24.09))/2;
+  s+='<g transform="translate('+amx.toFixed(1)+' '+amy.toFixed(1)+') rotate(60)"><path d="M-6,0 L6,0 M2,-4 L6,0 L2,4" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>';
+  // --- escales croisière (points) ---
+  RT_DOTS.forEach(d=>{s+='<circle class="dot" cx="'+X(d[0]).toFixed(1)+'" cy="'+Y(d[1]).toFixed(1)+'" r="3.4"/>';});
+  // --- POI ---
+  POIS.forEach(p=>{
+    const x=X(p.lon).toFixed(1),y=Y(p.lat).toFixed(1);
+    s+='<circle class="poi'+(p.opt?' opt':'')+'" cx="'+x+'" cy="'+y+'" r="5.6"/>';
+    const lx=p.side==='r'?(+x+11):(+x-11), anch=p.side==='r'?'start':'end';
+    s+='<text class="mlab" x="'+lx.toFixed(1)+'" y="'+(+y+4).toFixed(1)+'" text-anchor="'+anch+'" style="font-size:11px">'+esc(p.n)+'</text>';
+    s+='<circle class="tap" data-poi="'+p.id+'" cx="'+x+'" cy="'+y+'" r="30"/>';
+  });
+  // --- pastilles étapes ---
+  RT_CITIES.forEach(c=>{
+    const x=X(c.lon).toFixed(1),y=Y(c.lat).toFixed(1);
+    s+='<circle class="pas" cx="'+x+'" cy="'+y+'" r="10"/>';
+    s+='<text class="pasnum" x="'+x+'" y="'+y+'">'+c.num+'</text>';
+    const lx=c.side==='r'?(+x+15):(+x-15), anch=c.side==='r'?'start':'end';
+    s+='<text class="mlab" x="'+lx.toFixed(1)+'" y="'+(+y-1).toFixed(1)+'" text-anchor="'+anch+'">'+esc(c.n)+'</text>';
+    s+='<text class="mlab sub" x="'+lx.toFixed(1)+'" y="'+(+y+12).toFixed(1)+'" text-anchor="'+anch+'">'+c.rng+'</text>';
+    s+=tapCircle(c.lon,c.lat,c.day,34);
+  });
+  // --- lentille + encart croisière ---
+  s+='<rect class="lens" x="353" y="298" width="30" height="90" rx="7"/>';
+  s+='<line class="lens" x1="353" y1="343" x2="216" y2="250"/>';
+  s+=buildInset();
+  // --- légende ---
+  s+=buildLegend();
+  s+='</svg>';
+  return s;
+}
+
+function buildInset(){
+  const x=14,y=214,w=204,h=284;
+  let s='<rect class="inset-bg" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="14"/>';
+  s+='<text class="inset-t" x="'+(x+14)+'" y="'+(y+22)+'">La croisière</text>';
+  s+='<text class="inset-sub" x="'+(x+14)+'" y="'+(y+37)+'">Assouan → Louxor · le long du Nil</text>';
+  const riverX=x+30, top=y+52, bot=y+h-14;
+  s+='<line class="nile" x1="'+riverX+'" y1="'+top+'" x2="'+riverX+'" y2="'+bot+'"/>';
+  s+='<line class="route r-cruise" x1="'+riverX+'" y1="'+top+'" x2="'+riverX+'" y2="'+bot+'"/>';
+  const stops=[
+    {n:'Louxor',d:'Jour 6-8',day:6},
+    {n:'Esna',d:'Jour 6',day:6},
+    {n:'Edfou',d:'Jour 6',day:6},
+    {n:'Kom Ombo',d:'Jour 5',day:5},
+    {n:'Assouan',d:'Jour 3-5',day:3}
+  ];
+  const step=(bot-top)/(stops.length-1);
+  stops.forEach((st,i)=>{
+    const cy=(top+i*step).toFixed(1);
+    s+='<g class="irow">';
+    s+='<rect class="irow-hit tap" data-day="'+st.day+'" x="'+x+'" y="'+(cy-step/2+2).toFixed(1)+'" width="'+w+'" height="'+(step-2).toFixed(1)+'" rx="8"/>';
+    s+='<circle class="pas" cx="'+riverX+'" cy="'+cy+'" r="6.5"/>';
+    s+='<text class="ilab" x="'+(riverX+16)+'" y="'+(+cy-1).toFixed(1)+'">'+esc(st.n)+'</text>';
+    s+='<text class="iday" x="'+(riverX+16)+'" y="'+(+cy+12).toFixed(1)+'">'+st.d+'</text>';
+    s+='</g>';
+  });
+  return s;
+}
+
+function buildLegend(){
+  const x=12,y=30,w=176,h=104;
+  let s='<rect class="leg-bg" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="11"/>';
+  const ix=x+14, tx=x+40; let ly=y+22;
+  const line=(inner,label)=>{const r='<g transform="translate('+ix+' '+ly+')">'+inner+'</g><text class="leg-t" x="'+tx+'" y="'+(ly+4)+'">'+label+'</text>';ly+=19;return r;};
+  s+=line('<line x1="-2" y1="0" x2="18" y2="0" stroke="var(--gold)" stroke-width="2" stroke-dasharray="1.5 4"/>','Avion');
+  s+=line('<line x1="-2" y1="0" x2="18" y2="0" stroke="var(--gold)" stroke-width="2.6"/>','Croisière (Nil)');
+  s+=line('<line x1="-2" y1="0" x2="18" y2="0" stroke="var(--gold)" stroke-width="2" stroke-dasharray="6 4"/>','Bus / transfert');
+  s+=line('<circle cx="8" cy="0" r="6" class="pas"/>','Étape (jour)');
+  s+=line('<circle cx="8" cy="0" r="5" class="poi"/>','Lieu d\'intérêt');
+  return s;
+}
+
+function buildVoyageMap(){
+  let h='<div class="mapwrap" id="mapwrap">'+buildMapSVG();
+  POIS.forEach(p=>{
+    const l=(X(p.lon)/MAP.VBW*100).toFixed(2), t=(Y(p.lat)/MAP.VBH*100).toFixed(2);
+    h+='<div class="mtip" id="tip-'+p.id+'" style="left:'+l+'%;top:'+t+'%"><b>'+esc(p.n)+'</b>'+esc(p.info)+'</div>';
+  });
+  h+='</div><div class="maphint">Touchez une étape pour ouvrir le jour · un lieu pour en savoir plus.</div>';
+  return h;
+}
+
+function mountMap(){
+  const wrap=document.getElementById('mapwrap');
+  if(!wrap)return;
+  const hideTips=()=>wrap.querySelectorAll('.mtip.on').forEach(t=>t.classList.remove('on'));
+  wrap.addEventListener('click',e=>{
+    const nav=e.target.closest('[data-day]');
+    if(nav){hideTips();const id=DAY2ITIN[+nav.dataset.day]||nav.dataset.day;location.hash='#/day/'+encodeURIComponent(id);return;}
+    const poi=e.target.closest('[data-poi]');
+    const wasOn=poi&&document.getElementById('tip-'+poi.dataset.poi).classList.contains('on');
+    hideTips();
+    if(poi&&!wasOn){document.getElementById('tip-'+poi.dataset.poi).classList.add('on');}
+  });
+}
+
 /* ---------- rendering ---------- */
 const view=document.getElementById('view');
 const titleEl=document.getElementById('title');
@@ -425,16 +665,9 @@ function pinRow(locations){
 function catRow(cat){return '<div class="ci" style="background:var(--card2)">'+svg(IC[cat])+'</div>';}
 
 /* ---- VOYAGE (home) ---- */
-function viewVoyage(){
-  const c=DATA.circuit;
-  let h='<div class="page">';
-  h+='<div class="hero"><div class="eyebrow">Bible de voyage</div>'+
-     '<h1 class="big">'+esc(c.name)+'</h1>'+
-     '<div class="sub">'+esc(c.structure)+'</div>'+
-     '<div class="metline"><span><b>'+esc(c.duration_label)+'</b></span>'+
-       '<span>Réf. <b>'+esc(c.reference)+'</b></span>'+
-       '<span><b>'+esc(c.language)+'</b></span></div></div>';
-  h+='<div class="sect-h">Itinéraire jour par jour</div>';
+let voyageMode='carte';   // 'carte' (défaut) | 'liste'
+function voyageList(){
+  let h='<div class="sect-h">Itinéraire jour par jour</div>';
   for(const it of ITIN){
     const dn=typeof it.day==='number'?('<small>Jour</small><b>'+it.day+'</b>'):('<small>Jours</small><b style="font-size:13px">'+esc(String(it.day).replace('-','–'))+'</b>');
     const nsites=(it.sites||[]).length;
@@ -445,10 +678,32 @@ function viewVoyage(){
           (nsites?('<span>· '+nsites+' site'+(nsites>1?'s':'')+'</span>'):'')+'</div></div>'+
         '<span class="chev">'+svg(IC.caret)+'</span></a>';
   }
+  return h;
+}
+function viewVoyage(){
+  const c=DATA.circuit;
+  let h='<div class="page">';
+  h+='<div class="hero"><div class="eyebrow">Bible de voyage</div>'+
+     '<h1 class="big">'+esc(c.name)+'</h1>'+
+     '<div class="sub">'+esc(c.structure)+'</div>'+
+     '<div class="metline"><span><b>'+esc(c.duration_label)+'</b></span>'+
+       '<span>Réf. <b>'+esc(c.reference)+'</b></span>'+
+       '<span><b>'+esc(c.language)+'</b></span></div></div>';
+  const mapOn=voyageMode==='carte';
+  h+='<div class="vtoggle" id="vtoggle">'+
+     '<button data-m="carte" class="'+(mapOn?'on':'')+'"><svg viewBox="0 0 24 24"><path d="M9 3L3 6v15l6-3 6 3 6-3V3l-6 3-6-3z"/><path d="M9 3v15M15 6v15"/></svg>Carte</button>'+
+     '<button data-m="liste" class="'+(mapOn?'':'on')+'"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Liste</button>'+
+     '</div>';
+  h+=mapOn?buildVoyageMap():voyageList();
   h+='<div class="footnote">Données : juillet 2026 · 100 % hors-ligne</div>';
   h+='</div>';
   view.innerHTML=h;
   setTitle('Voyage');
+  if(mapOn)mountMap();
+  document.querySelectorAll('#vtoggle button').forEach(b=>b.onclick=()=>{
+    if(voyageMode===b.dataset.m)return;
+    voyageMode=b.dataset.m;viewVoyage();window.scrollTo(0,0);
+  });
 }
 
 /* ---- DAY DETAIL ---- */
