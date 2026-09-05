@@ -4,7 +4,7 @@
  * CACHE_VERSION est injecté par build.py (hash du contenu) pour invalider
  * automatiquement le cache à chaque nouveau build.
  */
-const CACHE_VERSION = "a2fe6d30d890";
+const CACHE_VERSION = "82b480f11772";
 const CACHE_NAME = "egypte-guide-" + CACHE_VERSION;
 
 const ASSETS = [
