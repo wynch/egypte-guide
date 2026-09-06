@@ -3,8 +3,14 @@
  * 100 % hors-ligne (avion, désert, roaming coupé).
  * CACHE_VERSION est injecté par build.py (hash du contenu) pour invalider
  * automatiquement le cache à chaque nouveau build.
+ *
+ * Mises à jour (voir AGENT.md « Mises à jour de l'app installée ») :
+ * precache toujours frais (cache:"reload", jamais l'HTTP cache) pour ne pas
+ * figer une page stale sous le nouveau nom de cache ; messages GET_VERSION /
+ * SKIP_WAITING pour l'app ; notification ACTIVATED à toutes les pages ouvertes
+ * (une app iOS standalone reprise depuis la mémoire ne re-navigue jamais).
  */
-const CACHE_VERSION = "33bcb3afba4f";
+const CACHE_VERSION = "f7b305145512";
 const CACHE_NAME = "egypte-guide-" + CACHE_VERSION;
 
 const ASSETS = [
@@ -19,16 +25,38 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(ASSETS.map((url) => new Request(url, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: "window" }))
+      .then((clients) => {
+        for (const c of clients) c.postMessage({ type: "ACTIVATED", version: CACHE_VERSION });
+      })
   );
+});
+
+self.addEventListener("message", (event) => {
+  const data = event.data;
+  if (!data) return;
+  if (data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+    return;
+  }
+  if (data.type === "GET_VERSION") {
+    const reply = { type: "VERSION", version: CACHE_VERSION };
+    if (event.ports && event.ports[0]) event.ports[0].postMessage(reply);
+    else if (event.source) event.source.postMessage(reply);
+  }
 });
 
 self.addEventListener("fetch", (event) => {
