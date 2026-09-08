@@ -10,7 +10,7 @@
  * SKIP_WAITING pour l'app ; notification ACTIVATED à toutes les pages ouvertes
  * (une app iOS standalone reprise depuis la mémoire ne re-navigue jamais).
  */
-const CACHE_VERSION = "f7b305145512";
+const CACHE_VERSION = "675b4cfd9573";
 const CACHE_NAME = "egypte-guide-" + CACHE_VERSION;
 
 const ASSETS = [
