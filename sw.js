@@ -27,7 +27,7 @@
  *   open page on activation (an iOS standalone app resumed from memory never
  *   navigates again).
  */
-const CACHE_VERSION = "4bcba520069e";
+const CACHE_VERSION = "2302d79ffa92";
 const CACHE_NAME = "egypte-guide-" + CACHE_VERSION;
 const META = "egypte-guide-meta";
 const FAILED_KEY = "failed";
