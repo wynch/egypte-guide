@@ -27,9 +27,12 @@
  *   open page on activation (an iOS standalone app resumed from memory never
  *   navigates again).
  */
-const CACHE_VERSION = "bb0037051af9";
-const CACHE_NAME = "egypte-guide-" + CACHE_VERSION;
-const META = "egypte-guide-meta";
+const CACHE_VERSION = "8f3acfbff1cd";
+// The origin (wynch.github.io) hosts other apps; only names under this prefix
+// belong to the guide, and only those are ever deleted.
+const CACHE_PREFIX = "egypte-guide-";
+const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
+const META = CACHE_PREFIX + "meta";
 const FAILED_KEY = "failed";
 const RELOAD_BACKOFF_MS = 3 * 60 * 60 * 1000;
 
@@ -116,7 +119,7 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME && k !== META).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith(CACHE_PREFIX) && k !== CACHE_NAME && k !== META).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
       .then(() => self.clients.matchAll({ type: "window" }))
       .then((clients) => {
