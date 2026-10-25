@@ -27,7 +27,7 @@
  *   open page on activation (an iOS standalone app resumed from memory never
  *   navigates again).
  */
-const CACHE_VERSION = "bf667a3001f1";
+const CACHE_VERSION = "ea6262cd8fdd";
 // The origin (wynch.github.io) hosts other apps; only names under this prefix
 // belong to the guide, and only those are ever deleted.
 const CACHE_PREFIX = "egypte-guide-";
