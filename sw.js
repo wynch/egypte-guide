@@ -40,7 +40,7 @@
  *   from memory never navigates again); INSTALL_FAILED { version, reason } on
  *   a failed install, also kept in META under "install-error".
  */
-const CACHE_VERSION = "d9e9024f1efa";
+const CACHE_VERSION = "b5fece26742d";
 // The origin (wynch.github.io) hosts other apps; only names under this prefix
 // belong to the guide, and only those are ever deleted.
 const CACHE_PREFIX = "egypte-guide-";
